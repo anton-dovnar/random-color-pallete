@@ -17,40 +17,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'ColorPallete',
-  data() {
-    return {
-      colors: [],
-    };
-  },
-  methods: {
-    toHex(listOfData) {
-      const listOfHex = listOfData.flat().map((x) => x.toString(16));
-      for (let i = 0; i < listOfHex.length; i += 3) {
-        this.colors.push(`#${listOfHex.slice(i, i + 3).join('')}`);
-      }
-    },
-  },
-  mounted() {
-    (async () => {
-      try {
-        const url = 'http://colormind.io/api/';
-        const data = {
-          model: 'default',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const response = await axios.post(url, JSON.stringify(data));
-        this.toHex(response.data.result);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  },
+  props: ['colors'],
 };
 </script>
 

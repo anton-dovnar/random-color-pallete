@@ -1,14 +1,60 @@
 <template>
-  <ColorPallete msg="Welcome to Your Vue.js App"/>
+  <div id="container">
+    <h1>Color Pallete Generator</h1>
+    <ColorPallete :colors="colors" />
+    <RegenerateButton @regenerate="regenerate" />
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
 import ColorPallete from '@/components/ColorPallete.vue';
+import RegenerateButton from '@/components/RegenerateButton.vue';
 
 export default {
   name: 'App',
   components: {
     ColorPallete,
+    RegenerateButton,
+  },
+  data() {
+    return {
+      fetched: false,
+      colors: [],
+    };
+  },
+  methods: {
+    async getColorPallete() {
+      try {
+        const url = 'http://colormind.io/api/';
+        const data = {
+          model: 'default',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        const response = await axios.post(url, JSON.stringify(data));
+        this.toHex(response.data.result);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    toHex(listOfData) {
+      const listOfHex = listOfData.flat().map((x) => x.toString(16));
+      for (let i = 0; i < listOfHex.length; i += 3) {
+        this.colors.push(`#${listOfHex.slice(i, i + 3).join('')}`);
+      }
+    },
+    regenerate() {
+      this.colors = [];
+      this.getColorPallete();
+    },
+  },
+  mounted() {
+    if (!this.fetched) {
+      this.fetched = true;
+      this.getColorPallete();
+    }
   },
 };
 </script>
@@ -20,7 +66,7 @@ export default {
   padding: 0;
 }
 
-html, body, #app, #color-pallete {
+html, body, #app, #container {
   height: 100%;
 }
 
@@ -32,6 +78,11 @@ html, body, #app, #color-pallete {
 }
 
 body {
+  color: #31323D;
   background-color: #F0F0F0;
+}
+
+h1 {
+  margin: 2rem 0;
 }
 </style>
