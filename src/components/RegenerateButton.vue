@@ -22,7 +22,6 @@ button {
   letter-spacing: 0.35em;
   transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
   padding: 1.2em 5em;
-  margin: 2rem 0;
   &:hover, &:active {
     box-shadow: inset 0 0 0 rgba(251,81,81,0.4), 0 0 1.5em rgba(251,81,81,0.6);
     color: rgba(255,255,255,1);

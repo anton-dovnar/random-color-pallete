@@ -1,5 +1,6 @@
 <template>
   <div id="container">
+    <Notification :notification="notification" />
     <h1>Color Pallete Generator</h1>
     <ColorPallete :colors="colors" @copyToClipboard="copyToClipboard" />
     <RegenerateButton @regenerate="regenerate" />
@@ -10,17 +11,20 @@
 import axios from 'axios';
 import ColorPallete from '@/components/ColorPallete.vue';
 import RegenerateButton from '@/components/RegenerateButton.vue';
+import Notification from '@/components/Notification.vue';
 
 export default {
   name: 'App',
   components: {
     ColorPallete,
     RegenerateButton,
+    Notification,
   },
   data() {
     return {
       fetched: false,
       colors: [],
+      notification: '',
     };
   },
   methods: {
@@ -51,6 +55,7 @@ export default {
     },
     copyToClipboard(color) {
       navigator.clipboard.writeText(color);
+      this.notification = `Color ${color} copied to your clipboard`;
     },
   },
   mounted() {
@@ -69,11 +74,9 @@ export default {
   padding: 0;
 }
 
-html, body, #app, #container {
-  height: 100%;
-}
-
 #app {
+  display: flex;
+  align-items: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,7 +88,18 @@ body {
   background-color: #F0F0F0;
 }
 
+#container {
+  flex-grow: 1;
+  padding: 1rem 0;
+}
+
 h1 {
   margin: 2rem 0;
+}
+
+@media screen and (min-width: 768px) {
+  html, body, #app {
+    height: 100%;
+  }
 }
 </style>
