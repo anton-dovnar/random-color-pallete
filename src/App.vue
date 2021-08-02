@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <h1>Color Pallete Generator</h1>
-    <ColorPallete :colors="colors" />
+    <ColorPallete :colors="colors" @copyToClipboard="copyToClipboard" />
     <RegenerateButton @regenerate="regenerate" />
   </div>
 </template>
@@ -48,6 +48,9 @@ export default {
     regenerate() {
       this.colors = [];
       this.getColorPallete();
+    },
+    copyToClipboard(color) {
+      navigator.clipboard.writeText(color);
     },
   },
   mounted() {

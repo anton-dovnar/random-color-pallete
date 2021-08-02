@@ -4,6 +4,7 @@
       class="colors"
       v-for="color in colors"
       :key="color"
+      @click="$emit('copyToClipboard', color)"
     >
       <div>
         <div
