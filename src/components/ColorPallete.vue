@@ -29,6 +29,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 2rem 0;
   .colors {
     cursor: pointer;
     border-radius: 10px;
