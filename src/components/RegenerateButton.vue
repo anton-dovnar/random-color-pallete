@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button @click="$emit('regenerate')">Generate Pallete</button>
+    <button @click="$emit('regenerate')">
+      Generate Pallete
+    </button>
   </div>
 </template>
 

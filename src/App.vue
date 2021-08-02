@@ -4,6 +4,7 @@
     <h1>Color Pallete Generator</h1>
     <ColorPallete :colors="colors" @copyToClipboard="copyToClipboard" />
     <RegenerateButton @regenerate="regenerate" />
+    <p>Or just press the "Spacebar" to generate new palettes.</p>
   </div>
 </template>
 
@@ -59,6 +60,11 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('keyup', (event) => {
+      if (event.key === ' ') {
+        this.regenerate();
+      }
+    });
     if (!this.fetched) {
       this.fetched = true;
       this.getColorPallete();
@@ -93,7 +99,7 @@ body {
   padding: 1rem 0;
 }
 
-h1 {
+h1, p {
   margin: 2rem 0;
 }
 
