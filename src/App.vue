@@ -2,9 +2,11 @@
   <div id="container">
     <Notification :notification="notification" />
     <h1>Color Pallete Generator</h1>
-    <ColorPallete :colors="colors" @copyToClipboard="copyToClipboard" />
+    <Loader v-if="loading" />
+    <ColorPallete :colors="colors" @copyToClipboard="copyToClipboard" v-else />
     <RegenerateButton @regenerate="regenerate" />
     <p>Or just press the "Spacebar" to generate new palettes.</p>
+    <p>Press "Shift + C" to copy full palette.</p>
   </div>
 </template>
 
@@ -13,6 +15,7 @@ import axios from 'axios';
 import ColorPallete from '@/components/ColorPallete.vue';
 import RegenerateButton from '@/components/RegenerateButton.vue';
 import Notification from '@/components/Notification.vue';
+import Loader from '@/components/Loader.vue';
 
 export default {
   name: 'App',
@@ -20,12 +23,14 @@ export default {
     ColorPallete,
     RegenerateButton,
     Notification,
+    Loader,
   },
   data() {
     return {
       fetched: false,
       colors: [],
       notification: '',
+      loading: true,
     };
   },
   methods: {
@@ -40,6 +45,7 @@ export default {
         };
         const response = await axios.post(url, JSON.stringify(data));
         this.toHex(response.data.result);
+        this.loading = false;
       } catch (error) {
         console.error(error);
       }
@@ -51,6 +57,7 @@ export default {
       }
     },
     regenerate() {
+      this.loading = true;
       this.colors = [];
       this.getColorPallete();
     },
@@ -58,11 +65,17 @@ export default {
       navigator.clipboard.writeText(color);
       this.notification = `Color ${color} copied to your clipboard`;
     },
+    copyFullPalette() {
+      navigator.clipboard.writeText(this.colors.join());
+      this.notification = 'Full palette copied to your clipboard';
+    },
   },
   mounted() {
     window.addEventListener('keyup', (event) => {
       if (event.key === ' ') {
         this.regenerate();
+      } else if (event.key === 'C') {
+        this.copyFullPalette();
       }
     });
     if (!this.fetched) {
